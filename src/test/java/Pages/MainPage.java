@@ -3,14 +3,14 @@ package Pages;
 import Bases.PageBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WrapsDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.swing.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.time.Duration;
 import java.util.List;
-import java.util.Locale;
 
 
 public class MainPage extends PageBase {
@@ -21,16 +21,19 @@ public class MainPage extends PageBase {
     By departureDateField = By.xpath("//fsw-input-button[@uniqueid='dates-from']");
     By returnDateField = By.xpath("//fsw-input-button[@uniqueid='dates-to']");
     By monthScrollMenu = By.xpath("//div[contains(@class,'m-toggle__month')]");
-    By dayScrollMenu = By.xpath("//div[@class='calendar-body__cell']");
+    By dayCalendar = By.xpath("//div[@class='calendar-body__cell']");
     By passengersField = By.xpath("//fsw-input-button[@uniqueid='passengers']");
-    By passengersCounter = By.xpath("//ry-counter[@data-ref='passengers-picker']");
+    By passengersCounter = By.xpath("//fsw-passengers-picker/ry-counter");
+    By passengerType = By.xpath(".//div[@class='passengers-picker__counter-main-label']");
+    By passengerCounterValue = By.xpath(".//div[@class='counter__value']");
+    By passengerCounterIncrement = By.xpath(".//div[@data-ref='counter.counter__increment']");
+    By searchButton = By.cssSelector(".flight-search-widget__start-search[_ngcontent-ryanair-homepage-c62]");
 
     public By locationOptionLocator(String location) {
         return By.xpath("//span[contains(text(),'" + location + "')]");
     }
 
     public void navigateToRyanaisPage() {
-        driver.manage().window().maximize();
         driver.navigate().to("https://www.ryanair.com/gb/en");
     }
 
@@ -58,7 +61,7 @@ public class MainPage extends PageBase {
         driver.findElement(locationOptionLocator(destination)).click();
     }
 
-    public void selectDepartureDate(String departureDate) throws ParseException {
+    public void selectDepartureDate(String departureDate)  {
 
         driver.findElement(departureDateField).click();//click on the field of departure date to open de calendar
 
@@ -81,26 +84,22 @@ public class MainPage extends PageBase {
             }
         }
         //Select the day on the month
-        List<WebElement> daysField = driver.findElements(dayScrollMenu);
+        List<WebElement> daysField = driver.findElements(dayCalendar);
         for (WebElement day : daysField) {
             if (day.getText().equals(dateString[0])) {
                 day.click();
                 break;
             }
         }
-
-
-
-
     }
 
     public void selectReturnDate(String returnDate) {
         driver.findElement(returnDateField).click();
-
         //Splits the informed date on day,month,year
         String[] dateString = returnDate.split(" ");
 
         //Select the month in the scrollable menu
+
         List<WebElement> monthsField = driver.findElements(monthScrollMenu);
         for (WebElement month : monthsField) {
             if (month.getText().equals(dateString[1])) {
@@ -110,7 +109,7 @@ public class MainPage extends PageBase {
         }
 
         //Select the day on the month
-        List<WebElement> daysField = driver.findElements(dayScrollMenu);
+        List<WebElement> daysField = driver.findElements(dayCalendar);
         for (WebElement day : daysField) {
             if (day.getText().equals(dateString[0])) {
                 day.click();
@@ -119,13 +118,25 @@ public class MainPage extends PageBase {
         }
     }
 
-    public void selectPassangers(String amount,String type) {
+    public void incrementPassangers(String quantity, String type) {
+        int desiredAmount = Integer.parseInt(quantity);
         driver.findElement(passengersField).click();
         List<WebElement> counters = driver.findElements(passengersCounter);
 
-        for(WebElement counter : counters){
-            if()
+        for (WebElement counter : counters) {
+            if (type.equals(counter.findElement(passengerType).getText())) {
+                int amountPage = Integer.parseInt(counter.findElement(passengerCounterValue).getText());
+                while (desiredAmount > amountPage) {
+                    counter.findElement(passengerCounterIncrement).click();
+
+                    amountPage = Integer.parseInt(counter.findElement(passengerCounterValue).getText());
+                }
+            }
         }
 
+    }
+
+    public void clickOnSearch() {
+        driver.findElement(searchButton).click();
     }
 }

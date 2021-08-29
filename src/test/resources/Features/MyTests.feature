@@ -8,13 +8,24 @@ Feature: Create a Flight from Lisboa to Paris
       | Departure      | Lisbon         |
       | Destination    | Paris Beauvais |
       | Departure Date | 15 Sep 2021    |
-      | Return Date    | 28 Jan 2022    |
+      | Return Date    | 15 Dec 2021    |
       | Adults         | 2              |
       | Children       | 1              |
     When I change the dates to
-      | Field          | Value          |
-      | Departure Date | 03 Jan 2022    |
-      | Return Date    | 01 Feb 2022    |
+      | Field          | Value       |
+      | Departure Date | 03 Oct 2021 |
+      | Return Date    | 30 Dec 2021 |
+    And Select the payment method
+    And I inform the passagers names
+      | Passenger 1 | Mrs Sónia Pereira   |
+      | Passenger 2 | Mr Diogo Bettencout |
+      | Passenger 3 | Inês Marçal         |
+    And Select the same seats for de flights
+      | Passenger 1 | 06A |
+      | Passenger 2 | 06C |
+      | Passenger 3 | 06B |
+
+
 
 
 

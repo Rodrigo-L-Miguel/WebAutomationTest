@@ -1,19 +1,18 @@
 package Pages;
 
-import Bases.PageBase;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.swing.*;
-import java.text.ParseException;
-import java.time.Duration;
+
 import java.util.List;
 
 
-public class MainPage extends PageBase {
+public class MainPage {
+    WebDriver driver;
+    public MainPage(WebDriver driver){
+        this.driver=driver;
+    }
 
     By agreeWithCookiesButtonLocator = By.className("cookie-popup-with-overlay__button");
     By departureFieldLocator = By.id("input-button__departure");
@@ -29,11 +28,12 @@ public class MainPage extends PageBase {
     By passengerCounterIncrement = By.xpath(".//div[@data-ref='counter.counter__increment']");
     By searchButton = By.cssSelector(".flight-search-widget__start-search[_ngcontent-ryanair-homepage-c62]");
 
+
     public By locationOptionLocator(String location) {
         return By.xpath("//span[contains(text(),'" + location + "')]");
     }
 
-    public void navigateToRyanaisPage() {
+    public void navigateToRyanairPage() {
         driver.navigate().to("https://www.ryanair.com/gb/en");
     }
 

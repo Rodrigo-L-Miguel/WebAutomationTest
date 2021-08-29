@@ -2,9 +2,11 @@ package StepDefinitions;
 
 import Pages.FlightPage;
 import Pages.MainPage;
+import Pages.SeatsPage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +20,7 @@ public class CreateFlightSteps {
     WebDriver driver = null;
     MainPage mainPage;
     FlightPage flightPage;
+    SeatsPage seatsPage;
 
     public String departure = null;
     public String destination = null;
@@ -82,6 +85,28 @@ public class CreateFlightSteps {
     @And("Select the same seats for de flights")
     public void selectTheSameSeatsForDeFlights(DataTable data) {
         Map<String, String> dataMap = data.asMap(String.class, String.class);
-        SeatsPage.selectSeat(dataMap.get("Passenger 1"));
+        seatsPage = new SeatsPage(driver);
+
+        seatsPage.selectSeat(dataMap.get("Passenger 1"));
+        seatsPage.selectSeat(dataMap.get("Passenger 2"));
+        seatsPage.selectSeat(dataMap.get("Passenger 3"));
+        seatsPage.clickOnNextFlight();
+        seatsPage.selectSeat(dataMap.get("Passenger 1"));
+        seatsPage.selectSeat(dataMap.get("Passenger 2"));
+        seatsPage.selectSeat(dataMap.get("Passenger 3"));
+        seatsPage.clickInContinue();
+        seatsPage.clickInNoThanks();
+
+    }
+
+    @And("Select {string} option")
+    public void selectSmallBagOnlyOption() {
+        seatsPage.selectSmallBagOnly();
+        seatsPage.clickInContinue();
+    }
+
+    @Then("proceed to finalize the purchase")
+    public void proceedToFinalizeThePurchase() {
+        seatsPage.clickOnContinueInTransports();
     }
 }

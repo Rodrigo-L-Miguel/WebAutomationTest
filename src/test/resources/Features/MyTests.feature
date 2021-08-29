@@ -24,6 +24,8 @@ Feature: Create a Flight from Lisboa to Paris
       | Passenger 1 | 06A |
       | Passenger 2 | 06C |
       | Passenger 3 | 06B |
+    And Select 'small bag only' option
+    Then proceed to finalize the purchase
 
 
 
